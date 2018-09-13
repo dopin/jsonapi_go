@@ -703,6 +703,52 @@ func TestManyPayload_withLinks(t *testing.T) {
 	}
 }
 
+func TestUnmarshalNestedAttributes(t *testing.T) {
+	json := `
+		{
+			"data": [
+				{
+					"id" : "1",
+					"type": "nested-blogs",
+					"attributes": {
+						"links": [
+							{
+								"url": "http://example.com",
+								"clicked-count": 10
+							}
+						]
+					}
+				}
+			]
+		}
+	`
+
+	r := strings.NewReader(json)
+	data, err := UnmarshalManyPayload(r, reflect.TypeOf(new(NestedBlog)))
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	blog, ok := data[0].(*NestedBlog)
+
+	if !ok {
+		t.Fatal("Type assertion of NestedBlog failed at data[0]")
+	}
+
+	if len(blog.Links) != 1 {
+		t.Fatalf("Was expecting attributes.links to have count 1, got %d", len(blog.Links))
+	}
+
+	if blog.Links[0].URL != "http://example.com" {
+		t.Fatalf("Was expecting attributes.links[0].url to have \"http://example.com\", got %s", blog.Links[0].URL)
+	}
+
+	if blog.Links[0].ClickedCount != 10 {
+		t.Fatalf("Was expecting attributes.links[0].clicked-count to have 10, got %d", blog.Links[0].ClickedCount)
+	}
+}
+
 func samplePayloadWithoutIncluded() map[string]interface{} {
 	return map[string]interface{}{
 		"data": map[string]interface{}{

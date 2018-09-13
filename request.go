@@ -445,6 +445,16 @@ func unmarshalNode(data *Node, model reflect.Value, included *map[string]*Node) 
 				continue
 			}
 
+			if fieldValue.Kind() == reflect.Slice {
+				newv := reflect.New(fieldValue.Type())
+				intf := newv.Interface()
+				buf := bytes.NewBuffer(nil)
+				json.NewEncoder(buf).Encode(val)
+				json.NewDecoder(buf).Decode(&intf)
+				fieldValue.Set(reflect.Indirect(reflect.ValueOf(intf)))
+				continue
+			}
+
 			// As a final catch-all, ensure types line up to avoid a runtime panic.
 			if fieldValue.Kind() != v.Kind() {
 				return ErrInvalidType
