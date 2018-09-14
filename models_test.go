@@ -80,7 +80,7 @@ type Blog struct {
 
 type LinkInArticle struct {
 	URL          string
-	ClickedCount int
+	ClickedCount int `json:"clicked-count"`
 }
 
 type NestedBlog struct {
