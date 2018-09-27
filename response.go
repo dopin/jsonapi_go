@@ -476,8 +476,9 @@ func visitModelNode(model interface{}, included *map[string]*Node,
 
 func toShallowNode(node *Node) *Node {
 	return &Node{
-		ID:   node.ID,
-		Type: node.Type,
+		ID:       node.ID,
+		ClientID: node.ClientID,
+		Type:     node.Type,
 	}
 }
 
