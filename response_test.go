@@ -39,9 +39,8 @@ func TestMarshalPayload(t *testing.T) {
 
 func TestMarshalPayloadWithNulls(t *testing.T) {
 
-	books := []*Book{nil, {ID:101}, nil}
+	books := []*Book{nil, {ID: 101}, nil}
 	var jsonData map[string]interface{}
-
 
 	out := bytes.NewBuffer(nil)
 	if err := MarshalPayload(out, books); err != nil {
@@ -966,5 +965,44 @@ func testBlog() *Blog {
 				Body: "foo",
 			},
 		},
+	}
+}
+
+func TestReadOnly(t *testing.T) {
+	type BlogWithReadonly struct {
+		ID    int    `jsonapi:"primary,blogs"`
+		Title string `jsonapi:"attr,title"`
+		Foo   string `jsonapi:"attr,foo,readonly"`
+	}
+
+	blog := &BlogWithReadonly{
+		ID:    1,
+		Title: "My Blog",
+		Foo:   "Don't include me.",
+	}
+
+	out := bytes.NewBuffer(nil)
+	if err := MarshalPayload(out, blog); err != nil {
+		t.Fatal(err)
+	}
+
+	var jsonData, data, attrs map[string]interface{}
+	var ok bool
+
+	if err := json.Unmarshal(out.Bytes(), &jsonData); err != nil {
+		t.Fatal(err)
+	}
+	if data, ok = jsonData["data"].(map[string]interface{}); !ok {
+		t.Fatalf("data key did not contain an Hash/Dict/Map")
+	}
+
+	if attrs, ok = data["attributes"].(map[string]interface{}); !ok {
+		t.Fatalf("data.attributes key did not contain an Hash/Dict/Map")
+	}
+
+	for k := range attrs {
+		if k == "foo" {
+			t.Fatalf("Foo is not excluded.")
+		}
 	}
 }

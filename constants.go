@@ -6,6 +6,7 @@ const (
 	annotationPrimary   = "primary"
 	annotationClientID  = "lid"
 	annotationAttribute = "attr"
+	annotationReadOnly  = "readonly"
 	annotationRelation  = "relation"
 	annotationOmitEmpty = "omitempty"
 	annotationISO8601   = "iso8601"
