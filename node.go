@@ -37,7 +37,7 @@ func (p *ManyPayload) clearIncluded() {
 type Node struct {
 	Type          string                 `json:"type"`
 	ID            string                 `json:"id,omitempty"`
-	ClientID      string                 `json:"client-id,omitempty"`
+	ClientID      string                 `json:"lid,omitempty"`
 	Attributes    map[string]interface{} `json:"attributes,omitempty"`
 	Relationships map[string]interface{} `json:"relationships,omitempty"`
 	Links         *Links                 `json:"links,omitempty"`

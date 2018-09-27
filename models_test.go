@@ -42,7 +42,7 @@ type Post struct {
 	Blog
 	ID            uint64     `jsonapi:"primary,posts"`
 	BlogID        int        `jsonapi:"attr,blog_id"`
-	ClientID      string     `jsonapi:"client-id"`
+	ClientID      string     `jsonapi:"lid"`
 	Title         string     `jsonapi:"attr,title"`
 	Body          string     `jsonapi:"attr,body"`
 	Comments      []*Comment `jsonapi:"relation,comments"`
@@ -51,7 +51,7 @@ type Post struct {
 
 type Comment struct {
 	ID       int    `jsonapi:"primary,comments"`
-	ClientID string `jsonapi:"client-id"`
+	ClientID string `jsonapi:"lid"`
 	PostID   int    `jsonapi:"attr,post_id"`
 	Body     string `jsonapi:"attr,body"`
 }
@@ -69,7 +69,7 @@ type Book struct {
 
 type Blog struct {
 	ID            int       `jsonapi:"primary,blogs"`
-	ClientID      string    `jsonapi:"client-id"`
+	ClientID      string    `jsonapi:"lid"`
 	Title         string    `jsonapi:"attr,title"`
 	Posts         []*Post   `jsonapi:"relation,posts"`
 	CurrentPost   *Post     `jsonapi:"relation,current_post"`
